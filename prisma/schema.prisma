@@ -1,0 +1,259 @@
+// Pihu Cakes & Bakes — database schema
+// Works with both local SQLite (dev) and Turso/LibSQL (production on Vercel)
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  icon        String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+
+  @@index([slug])
+}
+
+model Product {
+  id           String         @id @default(cuid())
+  name         String
+  slug         String         @unique
+  categoryId   String
+  category     Category       @relation(fields: [categoryId], references: [id])
+  description  String
+  ingredients  String
+  prepHours    Int            @default(24)
+  rating       Float          @default(4.8)
+  reviewCount  Int            @default(0)
+  isFeatured   Boolean        @default(false)
+  isBestSeller Boolean        @default(false)
+  isFreshToday Boolean        @default(false)
+  isSeasonal   Boolean        @default(false)
+  eggless      Boolean        @default(false)
+  tags         String         @default("")
+  status       String         @default("active") // active | inactive
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  images       ProductImage[]
+  weights      WeightPrice[]
+  orderItems   OrderItem[]
+  reviews      Review[]
+  wishlistItems WishlistItem[]
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([isFeatured])
+  @@index([eggless])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String  @default("")
+  order     Int     @default(0)
+
+  @@index([productId])
+}
+
+model WeightPrice {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  weight    String  // "1", "1.5", "2", "3", "5" (pounds)
+  label     String  // "1 Pound (~0.45kg)"
+  price     Int     // in rupees
+  mrp       Int?
+
+  @@index([productId])
+}
+
+model Order {
+  id                 String      @id @default(cuid())
+  orderId            String      @unique
+  customerName       String
+  mobile             String
+  email              String?
+  firebaseUid        String?
+  pickupDate         String
+  pickupSlot         String
+  specialRequirements String?
+  paymentMethod      String      @default("PAY_AT_PICKUP") // PAY_AT_PICKUP | ONLINE
+  paymentStatus      String      @default("PENDING")
+  status             String      @default("RECEIVED") // RECEIVED | ACCEPTED | PREPARING | READY | PICKED_UP | CANCELLED
+  subtotal           Int
+  discount           Int         @default(0)
+  total              Int
+  couponCode         String?
+  adminNote          String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  items              OrderItem[]
+  reviews            Review[]
+
+  @@unique([pickupDate, pickupSlot, id])
+  @@index([pickupDate, pickupSlot, status])
+  @@index([status])
+  @@index([firebaseUid])
+  @@index([mobile])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  name      String
+  weight    String
+  qty       Int
+  price     Int
+  image     String?
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model PickupSlot {
+  id        String  @id @default(cuid())
+  label     String  @unique
+  startTime String
+  endTime   String
+  maxOrders Int     @default(5)
+  enabled   Boolean @default(true)
+  order     Int     @default(0)
+
+  @@index([label])
+  @@index([enabled])
+}
+
+model DisabledDate {
+  id     String @id @default(cuid())
+  date   String @unique // YYYY-MM-DD
+  reason String?
+
+  @@index([date])
+}
+
+model SlotClosure {
+  id        String @id @default(cuid())
+  date      String // YYYY-MM-DD
+  slotLabel String
+
+  @@unique([date, slotLabel])
+  @@index([date, slotLabel])
+}
+
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  type       String    // FLAT | PERCENT
+  value      Int
+  minOrder   Int       @default(0)
+  active     Boolean   @default(true)
+  expiresAt  DateTime?
+  usageLimit Int?
+  usedCount  Int       @default(0)
+  createdAt  DateTime  @default(now())
+
+  @@index([code])
+  @@index([active])
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderId      String?
+  order        Order?   @relation(fields: [orderId], references: [id])
+  customerName String
+  rating       Int
+  title        String?
+  body         String
+  images       String   @default("[]") // JSON array of urls
+  status       String   @default("pending") // pending | approved | rejected
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([productId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  mobile    String   @unique
+  email     String?
+  password  String
+  createdAt DateTime @default(now())
+
+  @@index([mobile])
+  @@index([email])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  @@index([username])
+}
+
+model Content {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@index([key])
+}
+
+// Cache table for AI search queries
+model AISearchCache {
+  id        String   @id @default(cuid())
+  query     String   @unique
+  results   String   // JSON stringified results
+  explanation String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([expiresAt])
+  @@index([createdAt])
+}
+
+// Chat sessions persisted to DB
+model ChatSession {
+  id        String   @id @default(cuid())
+  sessionId String   @unique
+  messages  String   // JSON array of chat messages
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  @@index([sessionId])
+  @@index([expiresAt])
+}
