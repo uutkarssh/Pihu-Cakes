@@ -32,4 +32,4 @@ export const useApp = create<AppState>()(persist((set, get) => ({
   clearCart: () => set({ cart: [] }), cartCount: () => get().cart.reduce((n, c) => n + c.qty, 0), cartSubtotal: () => get().cart.reduce((n, c) => n + c.qty * c.price, 0),
   couponCode: null, setCoupon: (code) => set({ couponCode: code }), wishlist: [], toggleWishlist: (id) => set((s) => ({ wishlist: s.wishlist.includes(id) ? s.wishlist.filter((x) => x !== id) : [...s.wishlist, id] })),
   customer: null, setCustomer: (c) => set({ customer: c }), fbUser: null, setFbUser: (u) => set({ fbUser: u }), fbReady: false, setFbReady: (v) => set({ fbReady: v }), adminAuthed: false, setAdminAuthed: (v) => set({ adminAuthed: v }),
-}), { name: "kcb-bakery", skipHydration: true, partialize: (s) => ({ cart: s.cart, couponCode: s.couponCode, wishlist: s.wishlist, customer: s.customer, adminAuthed: s.adminAuthed }) })));
+}), { name: "kcb-bakery", skipHydration: true, partialize: (s) => ({ cart: s.cart, couponCode: s.couponCode, wishlist: s.wishlist, customer: s.customer, adminAuthed: s.adminAuthed }) }));
