@@ -24,7 +24,7 @@ export function FloatingButtons() {
   }, []);
 
   return (
-    <div className="fixed bottom-5 right-4 sm:right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-3 sm:bottom-5 sm:right-6 z-50 flex flex-col items-end gap-2.5 sm:gap-3">
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -40,10 +40,10 @@ export function FloatingButtons() {
         )}`}
         target="_blank"
         rel="noreferrer"
-        className="w-14 h-14 rounded-full border-2.5 border-ink bg-[#25D366] text-white flex items-center justify-center nb-shadow-lg hover:scale-105 transition"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2.5 border-ink bg-[#25D366] text-white flex items-center justify-center nb-shadow-lg hover:scale-105 transition"
         aria-label="WhatsApp us"
       >
-        <WhatsAppIcon size={28} className="text-white" />
+        <WhatsAppIcon size={26} className="text-white sm:w-7 sm:h-7" />
       </a>
       <button
         onClick={() => {
@@ -51,12 +51,12 @@ export function FloatingButtons() {
           window.dispatchEvent(new CustomEvent("toggle-bakery-chat", { detail: !openChat }));
         }}
         className={cn(
-          "w-14 h-14 rounded-full border-2.5 border-ink flex items-center justify-center nb-shadow-lg hover:scale-105 transition",
+          "w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2.5 border-ink flex items-center justify-center nb-shadow-lg hover:scale-105 transition",
           openChat ? "bg-burgundy text-white" : "bg-terracotta text-white"
         )}
         aria-label="AI Bakery Assistant"
       >
-        {openChat ? <Sparkles size={24} /> : <Sparkles size={24} className="animate-wiggle" />}
+        {openChat ? <Sparkles size={22} /> : <Sparkles size={22} className="animate-wiggle" />}
       </button>
     </div>
   );
