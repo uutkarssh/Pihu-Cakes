@@ -28,7 +28,7 @@ const trustBadges = [
   { icon: Flame, title: "Freshly Baked", text: "Every single day" },
   { icon: Award, title: "Premium Ingredients", text: "No compromises" },
   { icon: Cake, title: "Made to Order", text: "Handcrafted for you" },
-  { icon: Store, title: "Store Pickup", text: "Reserve & collect" },
+  { icon: Store, title: "Pickup or Delivery", text: "Choose what suits you" },
 ];
 
 const occasions = ["Birthday", "Anniversary", "Wedding", "Baby Shower", "Farewell", "Festival"];
@@ -69,8 +69,7 @@ export function HomeView() {
               <span className="italic text-terracotta">Made With Love.</span>
             </h1>
             <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-md">
-              Reserve your celebration cake online and pick it up fresh from our
-              neighbourhood bakery. Birthday, anniversary, wedding, designer &amp;
+              Order your celebration cake online for home delivery or fresh store pickup. Birthday, anniversary, wedding, designer &amp;
               eggless — handmade with care.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -78,7 +77,7 @@ export function HomeView() {
                 Order Fresh Today
               </BakeryButton>
               <BakeryButton variant="cream" onClick={openChat}>
-                <Sparkles size={16} className="mr-1.5" /> Ask Pihu AI
+                <Sparkles size={16} className="mr-1.5" /> Ask KCB AI
               </BakeryButton>
             </div>
             <div className="mt-6 flex items-center gap-4 text-sm">
@@ -93,7 +92,7 @@ export function HomeView() {
             <div className="absolute -top-3 -left-3 w-full h-full rounded-3xl bg-mustard border-2.5 border-ink" />
             <img
               src="/products/hero-bakery.png"
-              alt="Fresh cakes and pastries at Pihu Cakes & Bakes"
+              alt="Fresh cakes and pastries at KCB KiNGS Cakes Bakes"
               className="relative rounded-3xl border-2.5 border-ink nb-shadow-lg w-full object-cover aspect-[4/3]"
             />
             <div className="absolute -bottom-5 -right-3 bg-card border-2.5 border-ink rounded-2xl nb-shadow px-4 py-3 flex items-center gap-2 animate-float-y">
@@ -101,8 +100,8 @@ export function HomeView() {
                 <Store size={18} className="text-white" />
               </div>
               <div className="leading-tight">
-                <div className="font-display font-bold text-sm">Pickup only</div>
-                <div className="text-[11px] text-muted-foreground">Reserve · Collect · Enjoy</div>
+                <div className="font-display font-bold text-sm">Pickup or Delivery</div>
+                <div className="text-[11px] text-muted-foreground">Choose · Order · Enjoy</div>
               </div>
             </div>
           </div>
@@ -162,7 +161,7 @@ export function HomeView() {
           <ProductRow
             title="Fresh Today"
             icon={<Flame className="text-terracotta" size={22} />}
-            subtitle="Baked fresh this morning — pick them up today!"
+            subtitle="Baked fresh this morning — pickup or delivery available."
             products={fresh.slice(0, 4)}
           />
         )}
@@ -226,7 +225,7 @@ export function HomeView() {
                     )}
                   </div>
                   {r.verified && (
-                    <Pill color="cream" className="ml-auto text-[10px]">
+                    <Pill color="cream" className="ml-auto text-[10px]>
                       <Check size={10} /> Verified
                     </Pill>
                   )}
@@ -240,7 +239,7 @@ export function HomeView() {
         <section className="grid md:grid-cols-2 gap-5 items-stretch">
           <BakeryCard className="overflow-hidden p-0">
             <iframe
-              title="Pihu Cakes & Bakes location"
+              title="KCB KiNGS Cakes Bakes location"
               src={BRAND.mapEmbed}
               className="w-full h-full min-h-[280px] border-0"
               loading="lazy"
@@ -276,7 +275,7 @@ export function HomeView() {
         {/* FAQs */}
         {faqs.length > 0 && (
           <section>
-            <SectionTitle align="center" subtitle="Everything you need to know about ordering & pickup.">
+            <SectionTitle align="center" subtitle="Everything you need to know about ordering, pickup & delivery.">
               Frequently Asked Questions
             </SectionTitle>
             <div className="mt-8 max-w-3xl mx-auto space-y-3">
@@ -318,14 +317,14 @@ export function HomeView() {
               Ready to taste the <span className="text-mustard italic">freshness?</span>
             </h2>
             <p className="mt-3 text-cream/80 max-w-xl mx-auto relative">
-              Reserve your cake in under 2 minutes. Pay at pickup or online — your call.
+              Order your cake in under 2 minutes. Choose home delivery or store pickup, then pay online or as available at checkout.
             </p>
             <div className="mt-6 flex flex-wrap gap-3 justify-center relative">
               <BakeryButton variant="mustard" onClick={() => navigate({ name: "search" })}>
                 Browse all cakes
               </BakeryButton>
               <BakeryButton variant="cream" onClick={openChat}>
-                <MessageSquareText size={16} className="mr-1.5" /> Chat with Pihu AI
+                <MessageSquareText size={16} className="mr-1.5" /> Chat with KCB AI
               </BakeryButton>
             </div>
           </BakeryCard>
@@ -438,7 +437,7 @@ function AIRecommend() {
 
         {loading && (
           <div className="mt-6 flex items-center gap-3 text-muted-foreground">
-            <Sparkles className="animate-pulse text-terracotta" size={18} /> Pihu is picking the perfect cakes…
+            <Sparkles className="animate-pulse text-terracotta" size={18} /> KCB AI is picking the perfect cakes…
           </div>
         )}
 
