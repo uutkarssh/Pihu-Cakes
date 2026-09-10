@@ -5,11 +5,12 @@ import { isAdmin } from "@/lib/auth";
 
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 100;
+const FULFILLMENT_TYPES = ["PICKUP", "DELIVERY"] as const;
 
 export async function GET(req: NextRequest) {
   if (!(await isAdmin()))
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  
+
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
   const q = searchParams.get("q")?.toLowerCase();
@@ -29,10 +30,7 @@ export async function GET(req: NextRequest) {
     ];
   }
 
-  // Get total count
   const total = await db.order.count({ where });
-
-  // Fetch paginated orders
   const orders = await db.order.findMany({
     where,
     include: { items: true },
@@ -55,26 +53,51 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { customerName, mobile, email, firebaseUid, pickupDate, pickupSlot, specialRequirements, paymentMethod, items, couponCode } = body;
+  const {
+    customerName,
+    mobile,
+    email,
+    firebaseUid,
+    fulfillmentType = "PICKUP",
+    pickupDate,
+    pickupSlot,
+    deliveryAddress,
+    deliveryFee,
+    specialRequirements,
+    paymentMethod,
+    items,
+    couponCode,
+  } = body;
+
+  if (!FULFILLMENT_TYPES.includes(fulfillmentType)) {
+    return NextResponse.json({ error: "Invalid fulfillment type" }, { status: 400 });
+  }
 
   if (!customerName || !mobile || !pickupDate || !pickupSlot || !items?.length) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
-  if (!/^\d{10}$/.test(String(mobile).replace(/\D/g, "").slice(-10)) && String(mobile).length < 10) {
+
+  if (String(mobile).replace(/\D/g, "").slice(-10).length !== 10) {
     return NextResponse.json({ error: "Invalid mobile number" }, { status: 400 });
   }
 
-  // Validate pickup date is in the future and not disabled
-  const today = todayISO();
-  if (pickupDate < today) {
-    return NextResponse.json({ error: "Pickup date cannot be in the past" }, { status: 400 });
-  }
-  const disabled = await db.disabledDate.findUnique({ where: { date: pickupDate } });
-  if (disabled) {
-    return NextResponse.json({ error: `Sorry, we are closed on this date (${disabled.reason || "holiday"})` }, { status: 400 });
+  if (fulfillmentType === "DELIVERY" && !String(deliveryAddress || "").trim()) {
+    return NextResponse.json({ error: "Delivery address is required" }, { status: 400 });
   }
 
-  // Check slot availability with single combined query (parallel execution)
+  const today = todayISO();
+  if (pickupDate < today) {
+    return NextResponse.json({ error: "Order date cannot be in the past" }, { status: 400 });
+  }
+
+  const disabled = await db.disabledDate.findUnique({ where: { date: pickupDate } });
+  if (disabled) {
+    return NextResponse.json(
+      { error: `Sorry, we are closed on this date (${disabled.reason || "holiday"})` },
+      { status: 400 }
+    );
+  }
+
   const [slot, closed, existingInSlot] = await Promise.all([
     db.pickupSlot.findFirst({ where: { label: pickupSlot } }),
     db.slotClosure.findFirst({ where: { date: pickupDate, slotLabel: pickupSlot } }),
@@ -94,29 +117,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "This time slot is fully booked, please pick another" }, { status: 400 });
   }
 
-  // Verify prices from database to prevent price manipulation
   const productIds = items.map((it: any) => it.productId).filter(Boolean);
-  let dbPrices: Map<string, Map<string, number>> = new Map();
+  const dbPrices: Map<string, Map<string, number>> = new Map();
   if (productIds.length > 0) {
     const dbProducts = await db.product.findMany({
       where: { id: { in: productIds } },
       include: { weights: true },
     });
     for (const p of dbProducts) {
-      const weightMap = new Map(p.weights.map((w: any) => [w.weight, w.price]));
-      dbPrices.set(p.id, weightMap);
+      dbPrices.set(p.id, new Map(p.weights.map((w: any) => [w.weight, w.price])));
     }
   }
 
   let subtotal = 0;
   const orderItems = items.map((it: any) => {
-    // Use DB price if available, otherwise fall back to client price (for custom items)
     let verifiedPrice = it.price;
     if (it.productId && dbPrices.has(it.productId)) {
       const weightPrices = dbPrices.get(it.productId)!;
-      if (weightPrices.has(it.weight)) {
-        verifiedPrice = weightPrices.get(it.weight)!;
-      }
+      if (weightPrices.has(it.weight)) verifiedPrice = weightPrices.get(it.weight)!;
     }
     subtotal += it.qty * verifiedPrice;
     return {
@@ -129,7 +147,6 @@ export async function POST(req: NextRequest) {
     };
   });
 
-  // Coupon
   let discount = 0;
   let appliedCoupon: string | null = null;
   if (couponCode) {
@@ -144,8 +161,14 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const total = subtotal - discount;
+  const normalizedDeliveryFee = fulfillmentType === "DELIVERY"
+    ? Math.max(0, Number.isFinite(Number(deliveryFee)) ? Math.round(Number(deliveryFee)) : 0)
+    : 0;
+  const total = subtotal - discount + normalizedDeliveryFee;
   const orderId = genOrderId();
+  const normalizedPayment = fulfillmentType === "DELIVERY"
+    ? (paymentMethod === "ONLINE" ? "ONLINE" : "PAY_ON_DELIVERY")
+    : (paymentMethod === "ONLINE" ? "ONLINE" : "PAY_AT_PICKUP");
 
   const order = await db.order.create({
     data: {
@@ -154,11 +177,14 @@ export async function POST(req: NextRequest) {
       mobile: String(mobile).replace(/\D/g, "").slice(-10),
       email: email || null,
       firebaseUid: firebaseUid || null,
+      fulfillmentType,
       pickupDate,
       pickupSlot,
+      deliveryAddress: fulfillmentType === "DELIVERY" ? String(deliveryAddress).trim() : null,
+      deliveryFee: normalizedDeliveryFee,
       specialRequirements: specialRequirements || null,
-      paymentMethod: paymentMethod || "PAY_AT_PICKUP",
-      paymentStatus: paymentMethod === "ONLINE" ? "PAID" : "PENDING",
+      paymentMethod: normalizedPayment,
+      paymentStatus: normalizedPayment === "ONLINE" ? "PAID" : "PENDING",
       status: "RECEIVED",
       subtotal,
       discount,
