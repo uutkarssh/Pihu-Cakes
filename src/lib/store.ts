@@ -6,7 +6,8 @@ import type { CartItemT } from "./types";
 export type RouteView =
   | { name: "home" } | { name: "search"; query?: string; category?: string }
   | { name: "product"; slug: string } | { name: "cart" } | { name: "checkout" }
-  | { name: "confirmation"; orderId: string } | { name: "account" } | { name: "contact" };
+  | { name: "confirmation"; orderId: string } | { name: "account" } | { name: "contact" }
+  | { name: "admin" };
 
 interface AppState {
   view: RouteView; history: RouteView[]; navigate: (v: RouteView) => void; back: () => void;
