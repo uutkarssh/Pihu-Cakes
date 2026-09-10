@@ -19,31 +19,47 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+const KCB_DESCRIPTION =
+  "KCB KiNGS Cakes Bakes is a bakery and cafe in Khamaria, Uttar Pradesh, offering fresh cakes, pastries, tasty snacks, and hot & cold beverages. Visit us at Sabji Mandi Main Market.";
+
 export const metadata: Metadata = {
-  title: "Pihu Cakes & Bakes | Freshly Baked. Made With Love. Pre-Book & Pickup",
-  description:
-    "Pihu Cakes & Bakes — a neighborhood bakery by Pihu General Store. Freshly baked birthday, anniversary, wedding, designer & eggless cakes. Reserve online, pick up in store. Handmade with premium ingredients.",
+  title: "KCB KiNGS Cakes Bakes | Bakery & Cafe in Khamaria, Uttar Pradesh",
+  description: KCB_DESCRIPTION,
   keywords: [
-    "bakery", "cakes", "birthday cake", "anniversary cake", "wedding cake",
-    "designer cake", "eggless cake", "pastries", "Pihu Cakes and Bakes",
-    "cake pickup", "pre-book cake", "custom cake",
+    "KCB KiNGS Cakes Bakes",
+    "KCB Bakery and Cafe",
+    "bakery in Khamaria",
+    "cake shop in Khamaria",
+    "bakery near Khamaria",
+    "cakes in Khamaria",
+    "birthday cake Khamaria",
+    "eggless cake Khamaria",
+    "custom cake Khamaria",
+    "pastry shop Khamaria",
+    "cafe in Khamaria",
+    "bakery near Sabji Mandi Khamaria",
+    "cake shop near Sabji Mandi",
+    "cakes near Bhawanath Patti",
+    "bakery in Bhawanath Patti",
   ],
-  authors: [{ name: "Pihu Cakes & Bakes" }],
+  authors: [{ name: "KCB KiNGS Cakes Bakes" }],
+  creator: "KCB KiNGS Cakes Bakes",
+  publisher: "KCB KiNGS Cakes Bakes",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Pihu Cakes & Bakes | Freshly Baked. Made With Love.",
-    description:
-      "Reserve your freshly baked cakes online and pick them up in store. Birthday, anniversary, wedding, designer & eggless cakes handmade with care.",
-    siteName: "Pihu Cakes & Bakes",
+    title: "KCB KiNGS Cakes Bakes | Bakery & Cafe in Khamaria",
+    description: KCB_DESCRIPTION,
+    siteName: "KCB KiNGS Cakes Bakes",
     type: "website",
+    locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pihu Cakes & Bakes | Freshly Baked. Made With Love.",
-    description: "Reserve freshly baked cakes online. Pickup in store.",
+    title: "KCB KiNGS Cakes Bakes | Bakery & Cafe in Khamaria",
+    description: KCB_DESCRIPTION,
   },
 };
 
@@ -51,7 +67,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${fraunces.variable} antialiased bg-background text-foreground`}
       >
