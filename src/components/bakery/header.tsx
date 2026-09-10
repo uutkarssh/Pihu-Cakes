@@ -73,10 +73,10 @@ export function Header() {
           <Logo />
           <div className="text-left leading-none">
             <div className="font-display font-black text-xl md:text-2xl text-ink">
-              Pihu
+              KCB
             </div>
             <div className="text-[10px] md:text-xs font-semibold text-terracotta tracking-widest uppercase">
-              Cakes &amp; Bakes
+              KiNGS Cakes Bakes
             </div>
           </div>
         </button>
@@ -112,7 +112,6 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2 ml-auto lg:ml-0 shrink-0">
-          {/* Account / auth state — clear Login button for guests, avatar for logged-in */}
           <button
             onClick={() => go({ name: "account" })}
             className={cn(
@@ -220,7 +219,7 @@ function Logo() {
   return (
     <img
       src="/logo.png"
-      alt="Pihu Bake House logo"
+      alt="KCB KiNGS Cakes Bakes logo"
       className="w-11 h-11 md:w-12 md:h-12 rounded-full border-2.5 border-ink nb-shadow-sm shrink-0 object-cover"
     />
   );
