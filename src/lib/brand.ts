@@ -12,7 +12,7 @@ export const BRAND = {
     "+91 73071 51218",
     "+91 90442 50919",
   ],
-  whatsapp: "916394036040", // wa.me number, no +
+  whatsapp: "916394036040",
   email: "",
   address:
     "Chaurasiya Ji, Sabji Mandi Main Market, Khamaria, Bhawanath Patti, Uttar Pradesh 221306",
@@ -20,13 +20,20 @@ export const BRAND = {
   lat: 25.242558,
   lng: 82.509355,
   hours: [
-    { day: "Daily", time: "12:00 PM – 11:30 PM" },
+    { day: "Thursday", time: "10:00 AM – 11:30 PM" },
+    { day: "Friday", time: "10:00 AM – 11:30 PM" },
+    { day: "Saturday", time: "10:00 AM – 11:30 PM" },
+    { day: "Sunday", time: "10:00 AM – 10:30 PM" },
+    { day: "Monday", time: "10:00 AM – 11:30 PM" },
+    { day: "Tuesday", time: "7:00 AM – 11:30 PM" },
+    { day: "Wednesday", time: "10:00 AM – 11:30 PM" },
   ],
   mapsQuery: "KCB+KiNGS+Cakes+Bakes+Khamaria+Uttar+Pradesh+221306",
   instagram: "",
   facebook: "",
   mapEmbed:
     "https://www.google.com/maps?q=25.242558,82.509355&hl=en&z=16&output=embed",
+  deliveryFee: 0,
 };
 
 export const COLORS = {
@@ -42,7 +49,9 @@ export const ORDER_STATUS = [
   "ACCEPTED",
   "PREPARING",
   "READY",
+  "OUT_FOR_DELIVERY",
   "PICKED_UP",
+  "DELIVERED",
   "CANCELLED",
 ] as const;
 
@@ -53,8 +62,10 @@ export const ORDER_STATUS_META: Record<
   RECEIVED: { label: "Order Received", color: "#E8B84B", step: 0 },
   ACCEPTED: { label: "Accepted", color: "#C6613D", step: 1 },
   PREPARING: { label: "Preparing", color: "#D98E5F", step: 2 },
-  READY: { label: "Ready for Pickup", color: "#8B3A3A", step: 3 },
-  PICKED_UP: { label: "Picked Up", color: "#6B8E23", step: 4 },
+  READY: { label: "Ready", color: "#8B3A3A", step: 3 },
+  OUT_FOR_DELIVERY: { label: "Out for Delivery", color: "#C6613D", step: 4 },
+  PICKED_UP: { label: "Picked Up", color: "#6B8E23", step: 5 },
+  DELIVERED: { label: "Delivered", color: "#6B8E23", step: 5 },
   CANCELLED: { label: "Cancelled", color: "#B23A3A", step: -1 },
 };
 
@@ -66,7 +77,7 @@ export const WEIGHTS = [
   { weight: "5", label: "5 Pound (~2.27kg)" },
 ];
 
-// Admin access: only these emails can log into the admin panel.
+// Admin access is verified server-side. Keep credentials in environment variables.
 export const ADMIN_EMAILS = [
   "ravimaurya335@gmail.com",
   "utkarshmaurya917027@gmail.com",
