@@ -20,7 +20,7 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
-      content: `Hi! I'm Pihu, your bakery assistant. Ask me about cakes, prices, pickup timings, eggless options or custom orders — I'm here to help!`,
+      content: `Hi! I'm KCB, your bakery assistant. Ask me about cakes, prices, pickup timings, eggless options or custom orders — I'm here to help!`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -74,7 +74,7 @@ export function ChatWidget() {
         </div>
         <div className="flex-1">
           <div className="font-display font-bold text-base leading-none">
-            Pihu Assistant
+            KCB Assistant
           </div>
           <div className="text-[11px] text-white/85 flex items-center gap-1 mt-0.5">
             <span className="w-2 h-2 rounded-full bg-[#7CFC00] border border-ink" />
@@ -91,26 +91,10 @@ export function ChatWidget() {
       </div>
 
       {/* messages */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto nb-scroll p-3 space-y-3 bg-cream"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto nb-scroll p-3 space-y-3 bg-cream">
         {messages.map((m, i) => (
-          <div
-            key={i}
-            className={cn(
-              "flex",
-              m.role === "user" ? "justify-end" : "justify-start"
-            )}
-          >
-            <div
-              className={cn(
-                "max-w-[85%] px-3.5 py-2 rounded-2xl border-2 border-ink text-sm whitespace-pre-wrap",
-                m.role === "user"
-                  ? "bg-terracotta text-white rounded-br-md nb-shadow-sm"
-                  : "bg-card text-ink rounded-bl-md nb-shadow-sm"
-              )}
-            >
+          <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
+            <div className={cn("max-w-[85%] px-3.5 py-2 rounded-2xl border-2 border-ink text-sm whitespace-pre-wrap", m.role === "user" ? "bg-terracotta text-white rounded-br-md nb-shadow-sm" : "bg-card text-ink rounded-bl-md nb-shadow-sm")}>
               {m.content}
             </div>
           </div>
@@ -128,11 +112,7 @@ export function ChatWidget() {
       {messages.length <= 2 && (
         <div className="px-3 pb-2 flex flex-wrap gap-1.5 bg-cream">
           {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => send(s)}
-              className="text-[11px] px-2.5 py-1 rounded-full border-2 border-ink bg-mustard text-ink font-semibold nb-shadow-sm nb-press"
-            >
+            <button key={s} onClick={() => send(s)} className="text-[11px] px-2.5 py-1 rounded-full border-2 border-ink bg-mustard text-ink font-semibold nb-shadow-sm nb-press">
               {s}
             </button>
           ))}
@@ -140,25 +120,9 @@ export function ChatWidget() {
       )}
 
       {/* input */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          send();
-        }}
-        className="p-3 border-t-2 border-ink bg-card flex gap-2"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask Pihu anything…"
-          className="flex-1 bg-cream border-2 border-ink rounded-full px-4 py-2 text-sm outline-none focus:border-terracotta"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-10 h-10 rounded-full border-2 border-ink bg-terracotta text-white flex items-center justify-center nb-shadow-sm nb-press disabled:opacity-50"
-          aria-label="Send"
-        >
+      <form onSubmit={(e) => { e.preventDefault(); send(); }} className="p-3 border-t-2 border-ink bg-card flex gap-2">
+        <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask KCB anything…" className="flex-1 bg-cream border-2 border-ink rounded-full px-4 py-2 text-sm outline-none focus:border-terracotta" />
+        <button type="submit" disabled={loading} className="w-10 h-10 rounded-full border-2 border-ink bg-terracotta text-white flex items-center justify-center nb-shadow-sm nb-press disabled:opacity-50" aria-label="Send">
           <Send size={16} />
         </button>
       </form>
@@ -167,10 +131,5 @@ export function ChatWidget() {
 }
 
 function Dot({ d = "0s" }: { d?: string }) {
-  return (
-    <span
-      className="w-2 h-2 rounded-full bg-terracotta animate-bounce"
-      style={{ animationDelay: d }}
-    />
-  );
+  return <span className="w-2 h-2 rounded-full bg-terracotta animate-bounce" style={{ animationDelay: d }} />;
 }
