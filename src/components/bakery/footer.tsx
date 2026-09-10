@@ -15,13 +15,13 @@ export function Footer() {
           <div className="flex items-center gap-2.5">
             <img
               src="/logo.png"
-              alt="Pihu Bake House"
+              alt="KCB KiNGS Cakes Bakes"
               className="w-12 h-12 rounded-full border-2 border-cream object-cover"
             />
             <div className="leading-none">
-              <div className="font-display font-black text-xl">Pihu</div>
+              <div className="font-display font-black text-xl">KCB</div>
               <div className="text-[10px] font-semibold text-mustard tracking-widest uppercase">
-                Cakes &amp; Bakes
+                KiNGS Cakes Bakes
               </div>
             </div>
           </div>
@@ -29,38 +29,18 @@ export function Footer() {
             {BRAND.mission}
           </p>
           <p className="mt-3 text-xs text-cream/60">
-            A neighbourhood bakery by {BRAND.parentStore}.
+            {BRAND.parentStore}
           </p>
         </div>
 
         <div>
           <h4 className="font-display font-bold text-mustard mb-3">Explore</h4>
           <ul className="space-y-2 text-sm text-cream/85">
-            <li>
-              <button className="hover:text-mustard" onClick={() => navigate({ name: "home" })}>
-                Home
-              </button>
-            </li>
-            <li>
-              <button className="hover:text-mustard" onClick={() => navigate({ name: "search" })}>
-                All Cakes
-              </button>
-            </li>
-            <li>
-              <button className="hover:text-mustard" onClick={() => navigate({ name: "search", category: "eggless-cakes" })}>
-                Eggless Cakes
-              </button>
-            </li>
-            <li>
-              <button className="hover:text-mustard" onClick={() => navigate({ name: "contact" })}>
-                Contact &amp; Location
-              </button>
-            </li>
-            <li>
-              <button className="hover:text-mustard" onClick={() => navigate({ name: "account" })}>
-                My Account
-              </button>
-            </li>
+            <li><button className="hover:text-mustard" onClick={() => navigate({ name: "home" })}>Home</button></li>
+            <li><button className="hover:text-mustard" onClick={() => navigate({ name: "search" })}>All Cakes</button></li>
+            <li><button className="hover:text-mustard" onClick={() => navigate({ name: "search", category: "eggless-cakes" })}>Eggless Cakes</button></li>
+            <li><button className="hover:text-mustard" onClick={() => navigate({ name: "contact" })}>Contact &amp; Location</button></li>
+            <li><button className="hover:text-mustard" onClick={() => navigate({ name: "account" })}>My Account</button></li>
           </ul>
         </div>
 
@@ -73,32 +53,18 @@ export function Footer() {
             </li>
             <li className="flex gap-2">
               <Phone size={16} className="text-mustard shrink-0 mt-0.5" />
-              <a href={`tel:${BRAND.phone}`} className="hover:text-mustard">
-                {BRAND.phone}
-              </a>
+              <a href={`tel:${BRAND.phone}`} className="hover:text-mustard">{BRAND.phone}</a>
             </li>
             <li className="flex gap-2">
               <Clock size={16} className="text-mustard shrink-0 mt-0.5" />
-              <span>
-                {BRAND.hours.map((h) => (
-                  <span key={h.day} className="block">
-                    {h.day}: {h.time}
-                  </span>
-                ))}
-              </span>
+              <span>{BRAND.hours.map((h) => <span key={h.day} className="block">{h.day}: {h.time}</span>)}</span>
             </li>
           </ul>
         </div>
 
         <div>
           <h4 className="font-display font-bold text-mustard mb-3">Connect With Us</h4>
-          <a
-            href={`https://wa.me/${BRAND.whatsapp}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2.5 w-full bg-[#25D366] text-white border-2 border-cream rounded-2xl px-4 py-3 hover:brightness-110 transition"
-            aria-label="Chat with us on WhatsApp"
-          >
+          <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 w-full bg-[#25D366] text-white border-2 border-cream rounded-2xl px-4 py-3 hover:brightness-110 transition" aria-label="Chat with us on WhatsApp">
             <WhatsAppIcon size={22} className="text-white" />
             <div className="text-left">
               <div className="font-bold text-sm">WhatsApp Us</div>
@@ -106,28 +72,11 @@ export function Footer() {
             </div>
           </a>
           <div className="mt-5">
-            <h4 className="font-display font-bold text-mustard mb-2 text-sm">
-              Newsletter
-            </h4>
-            <p className="text-xs text-cream/70 mb-2">
-              Seasonal specials &amp; offers, fresh from our oven.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Thank you for subscribing!");
-              }}
-              className="flex gap-2"
-            >
-              <input
-                type="email"
-                required
-                placeholder="your@email.com"
-                className="flex-1 bg-cream/10 border-2 border-cream/40 rounded-full px-3 py-1.5 text-xs text-cream placeholder:text-cream/40 outline-none focus:border-mustard"
-              />
-              <button className="bg-mustard text-ink border-2 border-cream rounded-full px-3 py-1.5 text-xs font-bold nb-press">
-                Join
-              </button>
+            <h4 className="font-display font-bold text-mustard mb-2 text-sm">Newsletter</h4>
+            <p className="text-xs text-cream/70 mb-2">Seasonal specials &amp; offers, fresh from our oven.</p>
+            <form onSubmit={(e) => { e.preventDefault(); alert("Thank you for subscribing!"); }} className="flex gap-2">
+              <input type="email" required placeholder="your@email.com" className="flex-1 bg-cream/10 border-2 border-cream/40 rounded-full px-3 py-1.5 text-xs text-cream placeholder:text-cream/40 outline-none focus:border-mustard" />
+              <button className="bg-mustard text-ink border-2 border-cream rounded-full px-3 py-1.5 text-xs font-bold nb-press">Join</button>
             </form>
           </div>
         </div>
@@ -135,7 +84,7 @@ export function Footer() {
 
       <div className="border-t border-cream/15">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-cream/60">
-          <p>© {new Date().getFullYear()} {BRAND.name}. Handcrafted with love in Manga Patti, Sudhwai.</p>
+          <p>© {new Date().getFullYear()} {BRAND.name}. Handcrafted with love in Khamaria, Uttar Pradesh.</p>
           <p>Freshly baked daily · Pickup only · No delivery</p>
         </div>
       </div>
