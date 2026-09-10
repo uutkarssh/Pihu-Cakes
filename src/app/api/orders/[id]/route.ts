@@ -4,7 +4,7 @@ import { isAdmin } from "@/lib/auth";
 import { BRAND } from "@/lib/brand";
 
 const ALLOWED_STATUSES = new Set([
-  "RECEIVED", "ACCEPTED", "PREPARING", "READY", "OUT_FOR_DELIVERY", "PICKED_UP", "DELIVERED", "CANCELLED",
+  "RECEIVED", "ACCEPTED", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED",
 ]);
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -32,7 +32,6 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (!ALLOWED_STATUSES.has(body.status)) return NextResponse.json({ error: "Invalid order status" }, { status: 400 });
     if (body.status === "OUT_FOR_DELIVERY" && order.fulfillmentType !== "DELIVERY") return NextResponse.json({ error: "Pickup orders cannot be marked out for delivery" }, { status: 400 });
     if (body.status === "DELIVERED" && order.fulfillmentType !== "DELIVERY") return NextResponse.json({ error: "Pickup orders cannot be marked delivered" }, { status: 400 });
-    if (body.status === "PICKED_UP" && order.fulfillmentType === "DELIVERY") return NextResponse.json({ error: "Delivery orders should be marked delivered" }, { status: 400 });
     data.status = body.status;
   }
   if (body.adminNote !== undefined) data.adminNote = body.adminNote;
