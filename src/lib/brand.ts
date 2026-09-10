@@ -44,13 +44,11 @@ export const COLORS = {
   ink: "#231C14",
 };
 
+// Keep the admin workflow intentionally small and easy to operate.
 export const ORDER_STATUS = [
   "RECEIVED",
   "ACCEPTED",
-  "PREPARING",
-  "READY",
   "OUT_FOR_DELIVERY",
-  "PICKED_UP",
   "DELIVERED",
   "CANCELLED",
 ] as const;
@@ -61,12 +59,9 @@ export const ORDER_STATUS_META: Record<
 > = {
   RECEIVED: { label: "Order Received", color: "#E8B84B", step: 0 },
   ACCEPTED: { label: "Accepted", color: "#C6613D", step: 1 },
-  PREPARING: { label: "Preparing", color: "#D98E5F", step: 2 },
-  READY: { label: "Ready", color: "#8B3A3A", step: 3 },
-  OUT_FOR_DELIVERY: { label: "Out for Delivery", color: "#C6613D", step: 4 },
-  PICKED_UP: { label: "Picked Up", color: "#6B8E23", step: 5 },
-  DELIVERED: { label: "Delivered", color: "#6B8E23", step: 5 },
-  CANCELLED: { label: "Cancelled", color: "#B23A3A", step: -1 },
+  OUT_FOR_DELIVERY: { label: "Out for Delivery", color: "#C6613D", step: 2 },
+  DELIVERED: { label: "Delivered", color: "#6B8E23", step: 3 },
+  CANCELLED: { label: "Cancel Delivery", color: "#B23A3A", step: -1 },
 };
 
 export const WEIGHTS = [
