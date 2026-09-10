@@ -57,7 +57,6 @@ export function ProductView({ slug }: { slug: string }) {
   });
   const reviews = reviewsQ.data?.reviews ?? [];
 
-  // AI suggestions: "Customers also loved" — other products in same category
   const relatedQ = useQuery({
     queryKey: ["products", "related", product?.categoryId],
     queryFn: () => api.products({
@@ -102,7 +101,6 @@ export function ProductView({ slug }: { slug: string }) {
 
   const handleAdd = () => {
     if (!weight) return;
-    // Login required to add to cart
     if (!fbReady) return;
     if (!fbUser) {
       toast.info("Please login to add cakes to your cart");
@@ -149,7 +147,6 @@ export function ProductView({ slug }: { slug: string }) {
       </button>
 
       <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-        {/* Gallery */}
         <div className="flex flex-col gap-3">
           <div className="relative aspect-square rounded-3xl border-2.5 border-ink nb-shadow-lg overflow-hidden bg-cream">
             <img
@@ -179,7 +176,6 @@ export function ProductView({ slug }: { slug: string }) {
           </div>
         </div>
 
-        {/* Info */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <Pill color="cream">{product.categoryName}</Pill>
@@ -210,7 +206,6 @@ export function ProductView({ slug }: { slug: string }) {
             {product.description}
           </p>
 
-          {/* Weight selector */}
           <div className="mt-6">
             <div className="text-sm font-semibold mb-2">Choose weight</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -232,7 +227,6 @@ export function ProductView({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {/* Quantity + actions */}
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1 bg-card border-2.5 border-ink rounded-full nb-shadow-sm">
               <button
@@ -273,10 +267,9 @@ export function ProductView({ slug }: { slug: string }) {
             </button>
           </div>
           <BakeryButton variant="mustard" className="mt-3 w-full" onClick={handleBuyNow}>
-            Reserve &amp; Pickup — Buy Now
+            Order Now — Pickup or Delivery
           </BakeryButton>
 
-          {/* Quick facts */}
           <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
             <BakeryCard className="p-3 flex items-center gap-2.5">
               <Clock size={18} className="text-terracotta" />
@@ -301,15 +294,14 @@ export function ProductView({ slug }: { slug: string }) {
           <div className="mt-3 text-xs text-muted-foreground bg-mustard/20 border-2 border-ink/20 rounded-xl p-3 flex gap-2">
             <Check size={16} className="text-terracotta shrink-0 mt-0.5" />
             <span>
-              Available for pickup. Pre-book at least{" "}
+              Available for pickup or home delivery. Pre-book at least{" "}
               <b>{product.prepHours < 24 ? `${product.prepHours} hours` : `${Math.ceil(product.prepHours / 24)} days`}</b>{" "}
-              in advance. Pay at pickup or online.
+              in advance. Choose your fulfilment option at checkout.
             </span>
           </div>
         </div>
       </div>
 
-      {/* AI suggestion: Customers also loved */}
       {related.length > 0 && (
         <section className="mt-16">
           <SectionTitle subtitle="Customers who viewed this cake also loved these.">
@@ -325,7 +317,6 @@ export function ProductView({ slug }: { slug: string }) {
         </section>
       )}
 
-      {/* Tabs: description / ingredients / reviews */}
       <section className="mt-14">
         <div className="flex gap-2 border-b-2 border-ink overflow-x-auto nb-scroll">
           {[
