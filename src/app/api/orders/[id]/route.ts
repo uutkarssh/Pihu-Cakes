@@ -42,6 +42,22 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   return NextResponse.json({ order: updated, whatsappLink });
 }
 
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
+  const order = await db.order.findFirst({ where: { OR: [{ orderId: id }, { id }] }, select: { id: true, status: true } });
+  if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (order.status !== "CANCELLED") return NextResponse.json({ error: "Only cancelled orders can be deleted" }, { status: 400 });
+
+  await db.$transaction(async (tx) => {
+    await tx.review.deleteMany({ where: { orderId: order.id } });
+    await tx.orderItem.deleteMany({ where: { orderId: order.id } });
+    await tx.order.delete({ where: { id: order.id } });
+  });
+
+  return NextResponse.json({ success: true });
+}
+
 export function buildWhatsAppLink(order: any): string {
   const items = order.items.map((it: any) => `• ${it.name} (${it.weight} lb) x${it.qty}`).join("\n");
   const isDelivery = order.fulfillmentType === "DELIVERY";
