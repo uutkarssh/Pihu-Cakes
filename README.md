@@ -1,15 +1,25 @@
-# Pihu Cakes & Bakes
+# KCB KiNGS Cakes Bakes
 
-A production-ready, full-stack bakery pre-booking & store-pickup website built with Next.js 16, TypeScript, Tailwind CSS 4, Prisma, Firebase Auth, and Z AI.
+A production-ready, full-stack bakery pre-booking & store-pickup website built with Next.js 16, TypeScript, Tailwind CSS 4, Prisma, Firebase Auth, and Google Gemini.
+
+## Business
+
+- **Business name:** KCB KiNGS Cakes Bakes
+- **Display name:** KCB Bakery & Cafe
+- **Address:** Chaurasiya Ji, Sabji Mandi Main Market, Khamaria, Bhawanath Patti, Uttar Pradesh 221306
+- **Coordinates:** 25.242558, 82.509355
+- **Phone:** +91 63940 36040
+- **Additional phones:** +91 73071 51218, +91 90442 50919
+- **Google Maps:** KCB KiNGS Cakes Bakes, Khamaria
 
 ## Features
 
 - **Customer website**: Home, search, product detail, cart, checkout, order confirmation, contact, account
 - **Authentication**: Email/password (primary) with name + phone required, Google + Phone OTP (secondary), powered by Firebase Auth
 - **Admin panel** (email-allowlisted): Dashboard with analytics + AI insights, products CRUD, orders with WhatsApp accept workflow, calendar/slots, coupons, reviews moderation
-- **AI features**: Bakery assistant chatbot, occasion recommendations, smart search, celebration message suggestions, product description & SEO generation, review summarization, order insights
+- **AI features**: KCB bakery assistant chatbot, occasion recommendations, smart search, celebration message suggestions, product description & SEO generation, review summarization, order insights
 - **Security**: Login required for cart, checkout, wishlist, and add-to-cart
-- **Design**: Modern Retro-Neobrutalism (bakery adapted) — cream, terracotta, mustard, burgundy
+- **Design**: Existing bakery design system is retained; this migration changes the business identity and content without redesigning the UI
 
 ## Tech Stack
 
@@ -21,7 +31,7 @@ A production-ready, full-stack bakery pre-booking & store-pickup website built w
 | Database | Prisma ORM (SQLite) |
 | Auth | Firebase Authentication |
 | Cloud sync | Firestore (wishlist + profiles) |
-| AI | Z AI (z-ai-web-dev-sdk) |
+| AI | Google Gemini API |
 | State | Zustand + TanStack Query |
 
 ## Quick Start (Local)
@@ -29,63 +39,19 @@ A production-ready, full-stack bakery pre-booking & store-pickup website built w
 ```bash
 bun install
 cp .env.example .env
-# Edit .env: set DATABASE_URL
-bun run db:push    # create database schema
-bun run db:seed    # (optional) seed sample data
-bun run dev        # start dev server on :3000
+# Edit .env: set DATABASE_URL and the required service credentials
+bun run db:push
+bun run db:seed
+bun run dev
 ```
 
 ## Deployment (Vercel + GitHub)
 
-### Step 1: Push to GitHub
-1. Create a new GitHub repository
-2. Push this project:
-   ```bash
-   git init
-   git add .
-   git commit -m "Pihu Cakes & Bakes — production ready"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/pihu-cakes-and-bakes.git
-   git push -u origin main
-   ```
+Import the repository into Vercel and configure the environment variables required by the application, including the database, Firebase, Gemini, and admin authentication settings. Never commit API keys or passwords to the repository.
 
-### Step 2: Import to Vercel
-1. Go to [vercel.com](https://vercel.com) → New Project → Import your GitHub repo
-2. Vercel auto-detects Next.js. Set these **Environment Variables** in Project Settings:
+## AI
 
-| Variable | Value | Required |
-|----------|-------|----------|
-| `DATABASE_URL` | `file:./db/custom.db` (or your Turso/Postgres URL) | Yes |
-| `ZAI_API_KEY` | Your Z AI API key (for AI features) | Yes* |
-| `ZAI_BASE_URL` | `https://internal-api.z.ai/v1` | Optional |
-
-*Without `ZAI_API_KEY`, AI features show graceful fallback messages but the site works fine.
-
-3. Deploy. Vercel runs `prisma generate && next build` automatically (see `vercel.json`).
-
-### Step 3: Set up Firebase
-1. Go to [Firebase Console](https://console.firebase.google.com) → your project (`pihu-cakes-and-bakes`)
-2. **Authentication → Sign-in method**: enable Email/Password, Google, and Phone
-3. **Authentication → Settings → Authorized domains**: add your Vercel domain (e.g., `pihu-cakes-and-bakes.vercel.app`)
-4. **Firestore Database → Rules**: paste the contents of `firestore.rules` from this repo → Publish
-5. **Firestore Database → Create database** (if not already created)
-
-### Step 4: Admin Access
-Only these emails can access the admin panel (configured in `src/lib/brand.ts`):
-- `ravimaurya335@gmail.com`
-- `utkarshmaurya917027@gmail.com`
-
-Admin password: `pihu2024` (change in `src/lib/brand.ts` before deploying)
-
-## Z AI API Key
-
-The AI features (chatbot, recommendations, smart search, etc.) use the Z AI API.
-
-**Where to get the key**: Contact Z AI or use the Z AI platform to get an API key.
-
-**Where to add it**: Vercel Project Settings → Environment Variables → add `ZAI_API_KEY` with your key value.
-
-Without the key, all AI features gracefully fall back to static/cached responses — the website still works perfectly.
+The bakery assistant and AI-powered features use Google Gemini. Configure `GEMINI_API_KEY` in the environment. The AI context identifies the business as KCB KiNGS Cakes Bakes and uses the KCB store information and current database menu when answering customers.
 
 ## File Structure
 
@@ -93,15 +59,15 @@ Without the key, all AI features gracefully fall back to static/cached responses
 pihu-cakes-and-bakes/
 ├── prisma/
 │   ├── schema.prisma          # Database schema
-│   └── seed.ts                # Seed data (18 products, categories, slots, coupons)
+│   └── seed.ts                # Seed data
 ├── public/
 │   ├── logo.png               # Bakery logo
-│   ├── products/              # Product images (18 PNGs)
+│   ├── products/              # Product images
 │   └── uploads/               # User-uploaded images
 ├── src/
 │   ├── app/
 │   │   ├── api/               # API routes (products, orders, AI, admin, etc.)
-│   │   │   ├── ai/            # 9 AI endpoints (chat, recommend, search, etc.)
+│   │   │   ├── ai/            # AI endpoints
 │   │   │   ├── admin/         # Admin login/logout/stats
 │   │   │   ├── orders/        # Order CRUD + WhatsApp link
 │   │   │   ├── products/      # Product CRUD
@@ -110,45 +76,43 @@ pihu-cakes-and-bakes/
 │   │   │   ├── dates/         # Disabled dates + closures
 │   │   │   ├── coupons/       # Coupon CRUD + validate
 │   │   │   ├── categories/    # Category CRUD
-│   │   │   ├── content/       # Site content (FAQs, promos)
+│   │   │   ├── content/       # Site content
 │   │   │   ├── me/            # Customer order lookup
 │   │   │   └── upload/        # Image upload
-│   │   ├── globals.css        # Tailwind + bakery design system
-│   │   ├── layout.tsx         # Root layout (fonts, metadata)
+│   │   ├── globals.css        # Existing bakery design system
+│   │   ├── layout.tsx         # Root layout and SEO metadata
 │   │   └── page.tsx           # Entry point → AppShell
 │   ├── components/
 │   │   ├── bakery/
-│   │   │   ├── admin/         # Admin panel (dashboard, orders, products, etc.)
-│   │   │   ├── views/         # Customer views (home, search, product, etc.)
+│   │   │   ├── admin/         # Admin panel
+│   │   │   ├── views/         # Customer views
 │   │   │   ├── app-shell.tsx  # Main SPA shell + routing
-│   │   │   ├── header.tsx     # Sticky header with nav + login
-│   │   │   ├── footer.tsx     # Footer with WhatsApp + links
-│   │   │   ├── auth-guard.tsx # Login gate for protected routes
-│   │   │   ├── chat-widget.tsx# AI bakery assistant
-│   │   │   └── ...
+│   │   │   ├── header.tsx     # Sticky header
+│   │   │   ├── footer.tsx     # Footer with KCB contact/location
+│   │   │   ├── auth-guard.tsx # Login gate
+│   │   │   └── chat-widget.tsx# KCB AI bakery assistant
 │   │   └── ui/                # shadcn/ui components
 │   └── lib/
-│       ├── ai.ts              # Z AI client (env-var + SDK fallback)
-│       ├── auth.ts            # Admin auth (email allowlist)
-│       ├── brand.ts           # Brand config (address, phone, admin emails)
+│       ├── ai.ts              # Gemini client
+│       ├── auth.ts            # Admin auth
+│       ├── brand.ts           # KCB brand/store config
+│       ├── bakery-context.ts  # KCB AI business context
 │       ├── db.ts              # Prisma client
 │       ├── firebase.ts        # Firebase init
-│       ├── firebase-auth.ts   # Auth functions (email, Google, OTP)
-│       ├── firestore.ts       # Firestore (profiles, wishlist sync)
-│       ├── store.ts           # Zustand store (router, cart, wishlist)
-│       └── ...
-├── firestore.rules            # Firestore security rules
-├── .env.example               # Environment variable template
-├── vercel.json                # Vercel deployment config
+│       ├── firebase-auth.ts   # Auth functions
+│       ├── firestore.ts       # Firestore
+│       └── store.ts           # Zustand store
+├── firestore.rules
+├── .env.example
+├── vercel.json
 ├── package.json
 └── README.md
 ```
 
-## Admin Credentials (Demo)
+## SEO
 
-- **Admin emails**: `ravimaurya335@gmail.com` / `utkarshmaurya917027@gmail.com`
-- **Admin password**: `pihu2024`
+The application metadata is optimized around the KCB brand and local intent for Khamaria, Bhawanath Patti, Uttar Pradesh, including searches for cakes, bakeries, pastries, custom cakes, eggless cakes, and the Sabji Mandi Main Market location.
 
 ## License
 
-© Pihu Cakes & Bakes. All rights reserved.
+© KCB KiNGS Cakes Bakes. All rights reserved.
