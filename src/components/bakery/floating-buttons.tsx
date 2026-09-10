@@ -36,7 +36,7 @@ export function FloatingButtons() {
       )}
       <a
         href={`https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(
-          "Hi Pihu Cakes & Bakes! I'd like to know more about your cakes."
+          "Hi KCB KiNGS Cakes Bakes! I'd like to know more about your cakes."
         )}`}
         target="_blank"
         rel="noreferrer"
