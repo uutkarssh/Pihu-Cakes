@@ -127,10 +127,13 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
   }
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-fraunces), Georgia, serif;
