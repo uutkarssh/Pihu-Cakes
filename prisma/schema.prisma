@@ -1,5 +1,4 @@
-// Pihu Cakes & Bakes — database schema
-// Works with both local SQLite (dev) and Turso/LibSQL (production on Vercel)
+// KCB KiNGS Cakes Bakes — database schema
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -40,7 +39,7 @@ model Product {
   isSeasonal   Boolean        @default(false)
   eggless      Boolean        @default(false)
   tags         String         @default("")
-  status       String         @default("active") // active | inactive
+  status       String         @default("active")
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   images       ProductImage[]
@@ -70,42 +69,46 @@ model WeightPrice {
   id        String  @id @default(cuid())
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  weight    String  // "1", "1.5", "2", "3", "5" (pounds)
-  label     String  // "1 Pound (~0.45kg)"
-  price     Int     // in rupees
+  weight    String
+  label     String
+  price     Int
   mrp       Int?
 
   @@index([productId])
 }
 
 model Order {
-  id                 String      @id @default(cuid())
-  orderId            String      @unique
-  customerName       String
-  mobile             String
-  email              String?
-  firebaseUid        String?
-  pickupDate         String
-  pickupSlot         String
+  id                  String      @id @default(cuid())
+  orderId             String      @unique
+  customerName        String
+  mobile              String
+  email               String?
+  firebaseUid         String?
+  fulfillmentType     String      @default("PICKUP") // PICKUP | DELIVERY
+  pickupDate          String
+  pickupSlot          String
+  deliveryAddress     String?
+  deliveryFee         Int         @default(0)
   specialRequirements String?
-  paymentMethod      String      @default("PAY_AT_PICKUP") // PAY_AT_PICKUP | ONLINE
-  paymentStatus      String      @default("PENDING")
-  status             String      @default("RECEIVED") // RECEIVED | ACCEPTED | PREPARING | READY | PICKED_UP | CANCELLED
-  subtotal           Int
-  discount           Int         @default(0)
-  total              Int
-  couponCode         String?
-  adminNote          String?
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
-  items              OrderItem[]
-  reviews            Review[]
+  paymentMethod       String      @default("PAY_AT_PICKUP") // PAY_AT_PICKUP | PAY_ON_DELIVERY | ONLINE
+  paymentStatus       String      @default("PENDING")
+  status              String      @default("RECEIVED") // RECEIVED | ACCEPTED | PREPARING | READY | OUT_FOR_DELIVERY | PICKED_UP | DELIVERED | CANCELLED
+  subtotal            Int
+  discount            Int         @default(0)
+  total               Int
+  couponCode          String?
+  adminNote           String?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  items               OrderItem[]
+  reviews             Review[]
 
   @@unique([pickupDate, pickupSlot, id])
   @@index([pickupDate, pickupSlot, status])
   @@index([status])
   @@index([firebaseUid])
   @@index([mobile])
+  @@index([fulfillmentType])
   @@index([createdAt])
 }
 
@@ -140,7 +143,7 @@ model PickupSlot {
 
 model DisabledDate {
   id     String @id @default(cuid())
-  date   String @unique // YYYY-MM-DD
+  date   String @unique
   reason String?
 
   @@index([date])
@@ -148,7 +151,7 @@ model DisabledDate {
 
 model SlotClosure {
   id        String @id @default(cuid())
-  date      String // YYYY-MM-DD
+  date      String
   slotLabel String
 
   @@unique([date, slotLabel])
@@ -158,7 +161,7 @@ model SlotClosure {
 model Coupon {
   id         String    @id @default(cuid())
   code       String    @unique
-  type       String    // FLAT | PERCENT
+  type       String
   value      Int
   minOrder   Int       @default(0)
   active     Boolean   @default(true)
@@ -181,8 +184,8 @@ model Review {
   rating       Int
   title        String?
   body         String
-  images       String   @default("[]") // JSON array of urls
-  status       String   @default("pending") // pending | approved | rejected
+  images       String   @default("[]")
+  status       String   @default("pending")
   verified     Boolean  @default(false)
   createdAt    DateTime @default(now())
 
@@ -232,24 +235,22 @@ model Content {
   @@index([key])
 }
 
-// Cache table for AI search queries
 model AISearchCache {
-  id        String   @id @default(cuid())
-  query     String   @unique
-  results   String   // JSON stringified results
+  id          String   @id @default(cuid())
+  query       String   @unique
+  results     String
   explanation String
-  createdAt DateTime @default(now())
-  expiresAt DateTime
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
 
   @@index([expiresAt])
   @@index([createdAt])
 }
 
-// Chat sessions persisted to DB
 model ChatSession {
   id        String   @id @default(cuid())
   sessionId String   @unique
-  messages  String   // JSON array of chat messages
+  messages  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expiresAt DateTime
