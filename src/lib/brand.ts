@@ -1,29 +1,32 @@
-// Pihu Cakes & Bakes — Brand identity & store config
+// KCB KiNGS Cakes Bakes — Brand identity & store config
 
 export const BRAND = {
-  name: "Pihu Cakes & Bakes",
-  parentStore: "Pihu General Store",
-  tagline: "Freshly Baked. Made With Love.",
+  name: "KCB KiNGS Cakes Bakes",
+  parentStore: "KCB Bakery & Cafe",
+  tagline: "Good Food Brings People Together.",
   mission:
-    "To bring handcrafted, freshly baked joy to every celebration in our neighbourhood — using premium ingredients, baked fresh daily, and made to order with care.",
-  phone: "+91 99351 13011",
-  whatsapp: "919935113011", // wa.me number, no +
-  email: "hello@pihucakesandbakes.in",
-  address:
-    "Wahida to Suriyawan Road, Sudhwai, Manga Patti, Uttar Pradesh 221310",
-  addressShort: "Manga Patti, Sudhwai, UP 221310",
-  lat: 25.33312,
-  lng: 82.350368,
-  hours: [
-    { day: "Mon – Fri", time: "9:00 AM – 9:00 PM" },
-    { day: "Saturday", time: "9:00 AM – 10:00 PM" },
-    { day: "Sunday", time: "10:00 AM – 8:00 PM" },
+    "Fresh cakes, tasty bakery treats, snacks, and hot & cold beverages from KCB KiNGS Cakes Bakes in Khamaria.",
+  phone: "+91 63940 36040",
+  phones: [
+    "+91 63940 36040",
+    "+91 73071 51218",
+    "+91 90442 50919",
   ],
-  mapsQuery: "Sudhwai+Manga+Patti+Suriyawan+Uttar+Pradesh+221310",
-  instagram: "https://instagram.com/pihucakesandbakes",
-  facebook: "https://facebook.com/pihucakesandbakes",
+  whatsapp: "916394036040", // wa.me number, no +
+  email: "",
+  address:
+    "Chaurasiya Ji, Sabji Mandi Main Market, Khamaria, Bhawanath Patti, Uttar Pradesh 221306",
+  addressShort: "Sabji Mandi Main Market, Khamaria, UP 221306",
+  lat: 25.242558,
+  lng: 82.509355,
+  hours: [
+    { day: "Daily", time: "12:00 PM – 11:30 PM" },
+  ],
+  mapsQuery: "KCB+KiNGS+Cakes+Bakes+Khamaria+Uttar+Pradesh+221306",
+  instagram: "",
+  facebook: "",
   mapEmbed:
-    "https://www.google.com/maps?q=25.33312,82.350368&hl=en&z=15&output=embed",
+    "https://www.google.com/maps?q=25.242558,82.509355&hl=en&z=16&output=embed",
 };
 
 export const COLORS = {
@@ -68,4 +71,4 @@ export const ADMIN_EMAILS = [
   "ravimaurya335@gmail.com",
   "utkarshmaurya917027@gmail.com",
 ];
-export const ADMIN_PASSWORD = "pihu2024"; // shared admin password
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
